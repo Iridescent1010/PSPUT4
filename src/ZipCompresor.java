@@ -6,9 +6,9 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public class ZipCompresor implements Runnable {
-    private String sourceFolder = "C:/Users/extre/Desktop/cosas/prueba";//ruta de la carpeta a comprimir
-    private String destinationFolder = "C:/Users/extre/Desktop/cosas/carpeta1";  //ruta de la carpeta donde quieres que aparezca el .zip
-    private String zipFileName = "archivo_comprimido.zip";              //nombre del .zip
+    private String sourceFolder; //ruta de la carpeta a comprimir
+    private String destinationFolder = "src/copiasSeguridad";  //ruta de la carpeta donde quieres que aparezca el .zip
+    private String zipFileName;             //nombre del .zip
 
     private WaitNotifyExample wait;
     public ZipCompresor(WaitNotifyExample wait, String nombreFichero, String sourceFolder) {
