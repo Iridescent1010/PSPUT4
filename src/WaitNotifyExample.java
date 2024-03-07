@@ -34,24 +34,4 @@ public class WaitNotifyExample {
         }
     }
 
-    public static void main(String[] args) {
-        WaitNotifyExample example = new WaitNotifyExample();
-
-        // Crea e inicia un hilo que espera la señal
-        Thread thread1 = new Thread(() -> {
-            example.waitForSignal();
-        });
-        thread1.start();
-
-        // Crea e inicia un hilo que envía la señal
-        Thread thread2 = new Thread(() -> {
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            example.sendSignal();
-        });
-        thread2.start();
-    }
 }

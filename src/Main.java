@@ -33,7 +33,7 @@ public class Main {
             hiloUp.start();
             hiloComp.start();
             System.out.println(dondeEstaElArchivo);
-            Thread.sleep(30000);
+            Thread.sleep(10000);
         }
 
 
