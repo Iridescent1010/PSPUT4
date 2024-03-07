@@ -1,21 +1,41 @@
 import java.io.IOException;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+        //le damos la direccion del fichero del que queremos hacer copia periodica
+        //cuando empezamos el proceso, le damos como nombre la fehca y hora
+        Scanner scanner = new Scanner(System.in);
+        String dondeEstaElArchivo= horaSistemaZona().split(" ")[0]+"_"+horaSistemaZona().split(" ")[1]+".zip";
+        System.out.println("intruduzca la ruta absoluta de la carpeta de la que hacer copia de seguridad");
+        String sourceFolder = scanner.nextLine();
         WaitNotifyExample wait = new WaitNotifyExample();
 
+        ZipCompresor comp = new ZipCompresor(wait, dondeEstaElArchivo, sourceFolder);
 
-        FTPUploaderRunnable comp = null;
+        FTPUploaderRunnable upload = null;
         try {
-            comp = new FTPUploaderRunnable(wait);
+            upload = new FTPUploaderRunnable(wait, dondeEstaElArchivo);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
         // Crear una instancia de Thread y pasarle el objeto Runnable
-        Thread hilo = new Thread(comp);
+        Thread hiloUp = new Thread(upload);
+        Thread hiloComp = new Thread(comp);
 
         // Iniciar el hilo
-        hilo.start();
+        //hiloUp.start();
+        //hiloComp.start();
+        System.out.println(dondeEstaElArchivo);
+    }
+    public static String horaSistemaZona(){
+        String hora;
+        ZonedDateTime horaActual = ZonedDateTime.now();
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
+        hora = horaActual.format(formato);
+        return hora;
     }
 }

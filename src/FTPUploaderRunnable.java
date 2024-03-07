@@ -15,7 +15,7 @@ public class FTPUploaderRunnable implements Runnable{
     private String remoteDirectory; //= "/cosas/";//ruta dentro del servidor ftp, a donde va el archivo a subir dentro de la maquina que aloja el servidor ftp
     private  WaitNotifyExample wait;
 
-    public FTPUploaderRunnable(WaitNotifyExample wait) throws IOException {
+    public FTPUploaderRunnable(WaitNotifyExample wait, String nomFich) throws IOException {
         Properties propiedades = new Properties();
         FileInputStream archivoPropiedades = new FileInputStream("src/conexion.properties");
         propiedades.load(archivoPropiedades);
@@ -23,7 +23,7 @@ public class FTPUploaderRunnable implements Runnable{
         this.port=Integer.parseInt(propiedades.getProperty("port"));
         this.pass=propiedades.getProperty("pass");
         this.user=propiedades.getProperty("user");
-        this.localFilePath = propiedades.getProperty("localFilePath");
+        this.localFilePath = propiedades.getProperty("localFilePath")+nomFich;
         this.remoteDirectory = propiedades.getProperty("remoteDirectory");
         this.wait = wait;
     }
@@ -46,10 +46,13 @@ public class FTPUploaderRunnable implements Runnable{
             ftpClient.login(user, pass);
             ftpClient.enterLocalPassiveMode();
             ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+            //espera a que termine de comprimirlo para mandarlo
+            wait.waitForSignal();
 
             File localFile = new File(localFilePath);
+            System.out.println(localFile+" a");
             FileInputStream inputStream = new FileInputStream(localFile);
-            wait.waitForSignal();
+
 
             boolean uploaded = ftpClient.storeFile(remoteDirectory + localFile.getName(), inputStream);
             inputStream.close();
