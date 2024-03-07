@@ -7,11 +7,11 @@ import java.io.IOException;
 public class FTPUploader {
     public static void main(String[] args) {
         String server = "localhost";
-        int port = 21;
+        int port = 21; //puerto del servidor ftp, 21 por defecto
         String user = "admin";
         String pass = "admin";
-        String localFilePath = "texto.txt";//donde se encuentra el archivo
-        String remoteDirectory = "/cosas/";//ruta dentro del servidor ftp
+        String localFilePath = "texto.txt";//donde se encuentra el archivo a subir
+        String remoteDirectory = "/cosas/";//ruta dentro del servidor ftp, a donde va el archivo a subir dentro de la maquina que aloja el servidor ftp
 
         FTPClient ftpClient = new FTPClient();
         try {
