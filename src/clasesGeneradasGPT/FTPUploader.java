@@ -1,3 +1,5 @@
+package clasesGeneradasGPT;
+
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import java.io.File;

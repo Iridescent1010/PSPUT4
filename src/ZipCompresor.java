@@ -5,23 +5,16 @@ import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-public class ZipFolderExample2 {
-
-    public static void main(String[] args) {
-        String sourceFolder = "C:/Users/extre/Desktop/cosas/prueba";//ruta de la carpeta a comprimir
-        String destinationFolder = "C:/Users/extre/Desktop/cosas";  //ruta de la carpeta donde quieres que aparezca el .zip
-        String zipFileName = "archivo_comprimido.zip";              //nombre del .zip
-
-        try {
-            zipFolder(sourceFolder, destinationFolder, zipFileName);
-            System.out.println("Carpeta comprimida exitosamente.");
-        } catch (IOException e) {
-            System.out.println("Error al comprimir la carpeta: " + e.getMessage());
-            e.printStackTrace();
-        }
+public class ZipCompresor implements Runnable {
+    private String sourceFolder = "C:/Users/extre/Desktop/cosas/prueba";//ruta de la carpeta a comprimir
+    private String destinationFolder = "C:/Users/extre/Desktop/cosas";  //ruta de la carpeta donde quieres que aparezca el .zip
+    private String zipFileName = "archivo_comprimido.zip";              //nombre del .zip
+    private WaitNotifyExample wait;
+    public ZipCompresor(WaitNotifyExample wait) {
+        this.wait = wait;
     }
 
-    public static void zipFolder(String sourceFolder, String destinationFolder, String zipFileName) throws IOException {
+    public void zipFolder(String sourceFolder, String destinationFolder, String zipFileName) throws IOException {
         FileOutputStream fos = new FileOutputStream(destinationFolder + File.separator + zipFileName);
         ZipOutputStream zos = new ZipOutputStream(fos);
 
@@ -31,7 +24,7 @@ public class ZipFolderExample2 {
         fos.close();
     }
 
-    private static void addFolderToZip(String folderPath, String sourceFolder, ZipOutputStream zos) throws IOException {
+    private void addFolderToZip(String folderPath, String sourceFolder, ZipOutputStream zos) throws IOException {
         File folder = new File(folderPath);
         File[] files = folder.listFiles();
 
@@ -59,5 +52,18 @@ public class ZipFolderExample2 {
                 zos.closeEntry();
             }
         }
+    }
+
+    @Override
+    public void run() {
+
+        try {
+            zipFolder(sourceFolder, destinationFolder, zipFileName);
+            System.out.println("Carpeta comprimida exitosamente.");
+        } catch (IOException e) {
+            System.out.println("Error al comprimir la carpeta: " + e.getMessage());
+            e.printStackTrace();
+        }
+        wait.sendSignal();
     }
 }
